@@ -1,7 +1,7 @@
 {
   "name": "dsh-claude-style",
   "description": "My Character derivative of Nwflower/dsh-claude-style: Claude interface with eight custom mascot animations for DeepSeek Harness",
-  "version": "0.16.3-my-character.1",
+  "version": "0.16.3-my-character.2",
   "type": "module",
   "main": "lib/host/index.js",
   "icon": "lib/claude-mark.svg",

@@ -1,0 +1,8 @@
+{
+  "group": "new",
+  "order": 1,
+  "at": "2026-10-19",
+  "external": true,
+  "zh": "**预构建安装**：通过 GitHub 的 dist 分支或版本标签安装已构建的二改包，新增手动发布工作流与安装说明；全新配置默认使用 Claude 品牌、我的角色和首页与对话显示，已有用户设置继续由 profile 配置决定。",
+  "en": "**Prebuilt installation**: install the built fork from its GitHub dist branch or version tag, with a manual publishing workflow and installation guide; fresh profiles default to the Claude brand, My Character and home-and-conversation placement, while existing profile settings retain precedence."
+}

@@ -9,6 +9,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 <h3 id="cn-unreleased">新增功能</h3>
 
 - **二改版 · 我的角色**：基于 Nwflower/dsh-claude-style 新增独立于界面品牌的自有角色选项，保留 Claude 界面与原角色，以八组透明动画共 602 帧覆盖 18 种角色状态，并支持本地 PNG 角色包构建与二进制资源原样加载。
+- **预构建安装**：通过 GitHub 的 dist 分支或版本标签安装已构建的二改包，新增手动发布工作流与安装说明；全新配置默认使用 Claude 品牌、我的角色和首页与对话显示，已有用户设置继续由 profile 配置决定。
 
 ### 体验优化
 
@@ -26,6 +27,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 <h3 id="en-unreleased">New Features</h3>
 
 - **My Character fork**: this derivative of Nwflower/dsh-claude-style preserves the Claude interface and original mascots while adding an independent character option, eight transparent animations with 602 frames mapped to 18 character states, local PNG pack builds and unchanged binary asset delivery.
+- **Prebuilt installation**: install the built fork from its GitHub dist branch or version tag, with a manual publishing workflow and installation guide; fresh profiles default to the Claude brand, My Character and home-and-conversation placement, while existing profile settings retain precedence.
 
 ### Improvements
 

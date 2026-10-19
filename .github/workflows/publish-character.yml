@@ -1,0 +1,82 @@
+name: Publish My Character
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-my-character
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'z905888415-beep/dsh-claude-style-my-character' && github.ref == 'refs/heads/my-character'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies and verify the source
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci
+          npm run verify -- --full
+      - name: Publish the built branch and GitHub prerelease
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: |
+          set -euo pipefail
+          git_remote() {
+            git -c credential.helper= -c 'credential.helper=!gh auth git-credential' "$@"
+          }
+          version="$(node -p "require('./package.json').version")"
+          tag="v${version}"
+          git check-ref-format "refs/tags/${tag}"
+          existing_tag="$(git_remote ls-remote --tags origin "refs/tags/${tag}")"
+          if [ -n "$existing_tag" ]; then
+            echo "::error::${tag} is already published; increase the package version."
+            exit 1
+          fi
+          parents=()
+          remote_dist="$(git_remote ls-remote --heads origin refs/heads/dist)"
+          if [ -n "$remote_dist" ]; then
+            git_remote fetch --no-tags origin refs/heads/dist
+            parents=(-p "$(git rev-parse FETCH_HEAD)")
+          fi
+          node scripts/dist-branch.mjs
+          artifact_tree="$(git rev-parse 'refs/heads/dist^{tree}')"
+          artifact_commit="$(git commit-tree "$artifact_tree" "${parents[@]}" \
+            -m "chore(release): ${tag}" -m "Built from ${GITHUB_REPOSITORY}@${GITHUB_SHA}.")"
+          git update-ref refs/heads/dist "$artifact_commit"
+          git update-ref "refs/tags/${tag}" "$artifact_commit"
+          git_remote push --atomic origin refs/heads/dist "refs/tags/${tag}"
+          notes=.debug/my-character-release-notes.md
+          cat > "$notes" <<EOF
+          ## My Character derivative
+
+          This is a second modification of [Nwflower/dsh-claude-style](https://github.com/Nwflower/dsh-claude-style), originally authored by Nwflower.
+
+          The derivative adds eight custom character animations while retaining the Claude-style interface. Upstream attribution and license notices remain included.
+
+          Source: [${GITHUB_SHA}](https://github.com/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}).
+
+          Install in DeepSeek Harness using \`github:z905888415-beep/dsh-claude-style-my-character#dist\`.
+
+          The attached tarball and the dist branch contain the same prebuilt package.
+          EOF
+          gh release create "$tag" .debug/dist/pack/*.tgz --repo "$GITHUB_REPOSITORY" \
+            --verify-tag --prerelease --title "My Character ${version}" --notes-file "$notes"

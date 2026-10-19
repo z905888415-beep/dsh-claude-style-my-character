@@ -19,6 +19,7 @@
 - **八组透明循环动画**：空闲、思考、工作、指挥子代理、等待操作、失败、完成、睡眠，共 **602 帧**；默认 **20 fps、96 px 显示画布**。八组基础动画映射到插件的 18 种角色状态。
 - **完整接入角色设置与交互**：支持首页或首页与对话，压缩上下文、并行工作、点击及唤醒也显示自有角色。
 - **新增本地角色包构建**：通过透明 PNG 精灵图与清单描述帧数、尺寸和速度；构建检查图片尺寸及透明背景，PNG 通过二进制资源路由原样提供。
+- **直接安装预构建版本**：在 DeepSeek Harness 的「插件 → 添加插件」中粘贴下方安装地址，无需自行构建。首次安装默认使用 **Claude 界面＋我的角色＋首页与对话**。
 
 本二改由仓库维护者提供角色参考图和 Grok 生成的视频，再经本地绿幕抠像、位置统一、抽帧及循环整理制成。少数循环接缝仍有轻微叠影。完整改动、状态映射及验证范围见 [二改说明](docs/FORK_CHANGES.md)。
 
@@ -56,7 +57,44 @@ GIF 供文档预览；插件运行时使用透明 PNG 精灵图。
 
 ## 安装本二改版
 
-本二改尚未发布到 npm。安装上游的 `dsh-claude-style` 包会得到上游版本；请使用本仓库源码构建并从本地目录安装。需要 Node.js、npm 和 DeepSeek Harness（`dsh ≥ 0.1.7`）。
+### 推荐：在界面中添加插件
+
+1. 打开 DeepSeek Harness，进入 **插件 → 添加插件**。
+2. 粘贴以下完整地址并安装：
+
+   ```text
+   github:z905888415-beep/dsh-claude-style-my-character#dist
+   ```
+
+3. 安装成功后点击 **立即启用**，按提示重启 DeepSeek Harness。
+4. 首次安装默认使用 **Claude 界面＋我的角色**，角色显示于 **首页与对话**。已有主题配置的用户会保留已保存的偏好，请在插件「外观」设置中手动选择品牌 **Claude**、吉祥物 **我的角色** 和角色出现位置。
+
+`dist` 分支包含构建好的插件和八组角色动画，用户无需 clone 仓库、运行 `npm ci` / `npm run build`，也无需批准源码的 `prepare` 构建脚本。本二改尚未发布到 npm；直接安装 npm 上的 `dsh-claude-style` 会得到上游版本。
+
+需要固定版本时，将地址末尾的 `#dist` 换成 `#v0.16.3-my-character.2`。发行记录与安装包见 [Releases](https://github.com/z905888415-beep/dsh-claude-style-my-character/releases)。
+
+本二改沿用上游的包名和插件标识 `dsh-claude-style`，因此替换的是同一个插件入口，不能作为两套独立主题并行安装。此安装过程不会删除用户会话。
+
+### 可选：命令行安装
+
+**桌面版**请使用桌面安装自带的 `dsh` 命令，普通 npm CLI 不一定能管理桌面版。先至少打开过一次桌面版以完成配置初始化，再完全退出应用（包括后台托盘），然后执行：
+
+```bash
+dsh plugin --profile desktop add github:z905888415-beep/dsh-claude-style-my-character#dist
+```
+
+**网页版**执行：
+
+```bash
+dsh plugin --profile web add github:z905888415-beep/dsh-claude-style-my-character#dist
+```
+
+安装后重新打开对应版本，在插件中启用并按提示重启。GUI 安装无需事先退出桌面应用。配置分层及 GitHub 包安装原理见 [DeepSeek Harness 官方插件发布文档](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md)。
+
+<details>
+<summary>开发者可选：从源码构建安装</summary>
+
+需要 Node.js、npm 和兼容的 DeepSeek Harness。
 
 ```bash
 git clone https://github.com/z905888415-beep/dsh-claude-style-my-character.git
@@ -66,9 +104,15 @@ npm run build
 dsh plugin --profile web add .
 ```
 
-本二改沿用插件标识 `dsh-claude-style`。同一配置中只启用一个该主题版本，安装后重启 DeepSeek Harness；在插件「外观」设置中选择品牌 **Claude**、吉祥物 **我的角色**，并选择角色出现位置。
+上例安装到网页版；桌面版请使用桌面安装自带的 `dsh`，并将 `web` 换成 `desktop`，按上文要求先完全退出应用。安装后启用并重启宿主。
 
 角色包位于 [`packages/assets/src/mascot/custom/`](packages/assets/src/mascot/custom/)：八张透明 PNG 与 [`manifest.json`](packages/assets/src/mascot/custom/manifest.json)。每个源帧为 256 × 256 px，每行八格，默认每帧 50 ms、显示画布 96 × 96 px。替换素材后重新构建并重启宿主。
+
+</details>
+
+### 维护者发布新版
+
+修改版本号并提交源码后，在本仓库 **Actions → Publish My Character → Run workflow** 手动发布。每次发布须使用未发布过的版本号；工作流构建并更新 `dist` 分支，同时生成固定版本标签和 GitHub Release，不发布 npm 包。仅推送源码不会自动更新 `dist` 安装内容。
 
 ## 上游功能展示
 

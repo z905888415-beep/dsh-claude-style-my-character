@@ -19,6 +19,7 @@ Original author: [Nwflower](https://github.com/Nwflower) · Upstream base: [9349
 - **Eight transparent animation loops**: idle, thinking, working, conducting subagents, waiting for input, failed, finished and asleep, with **602 frames** in total; defaults are **20 fps and a 96 px display canvas**. Eight base animations map onto the plugin's 18 character states.
 - **Connects the character to settings and interactions**: show it on the home page or on both home and conversations; context compaction, concurrent work, clicks and waking also use the custom character.
 - **Adds a local character-pack build path**: transparent PNG sprite sheets and a manifest describe frame counts, dimensions and timing. The build checks dimensions and transparency, and the binary asset route serves the PNG bytes unchanged.
+- **Installs as a prebuilt plugin**: paste the installation address below into DeepSeek Harness's **Plugins → Add plugin** screen. A fresh installation defaults to **Claude + My Character**, shown on **home and conversations**.
 
 The fork maintainer supplied the character reference artwork and Grok-generated videos. Local processing removes the green background, aligns the character, extracts frames and prepares loops. A few loop seams retain slight ghosting. See [Fork changes](docs/FORK_CHANGES.md) for the implementation scope, state mapping and verification coverage.
 
@@ -56,7 +57,44 @@ GIFs are documentation previews; the plugin uses transparent PNG sprite sheets a
 
 ## Install this fork
 
-This fork has not been published to npm. The upstream `dsh-claude-style` package installs the upstream edition; build this repository and install it from the local directory to use these changes. Node.js, npm and DeepSeek Harness (`dsh ≥ 0.1.7`) are required.
+### Recommended: add it in the interface
+
+1. Open DeepSeek Harness and go to **Plugins → Add plugin**.
+2. Paste this full address and install:
+
+   ```text
+   github:z905888415-beep/dsh-claude-style-my-character#dist
+   ```
+
+3. After installation, click **Enable now** and restart DeepSeek Harness when prompted.
+4. A fresh installation defaults to **Claude + My Character**, with the character on **home and conversations**. Existing theme configurations retain saved preferences: open the plugin's **Appearance** settings and select **Claude**, **My Character** and the desired placement.
+
+The `dist` branch ships the built plugin and all eight character animations. Users do not need to clone the repository, run `npm ci` / `npm run build`, or approve a source `prepare` build script. This fork has not been published to npm; installing the npm package `dsh-claude-style` installs the upstream edition.
+
+To pin a release, replace `#dist` with `#v0.16.3-my-character.2`. See [Releases](https://github.com/z905888415-beep/dsh-claude-style-my-character/releases) for release notes and package downloads.
+
+This fork retains the upstream package name and plugin identifier `dsh-claude-style`. It replaces the same plugin entry and cannot be installed as a second independent theme alongside upstream. Installation does not delete user conversations.
+
+### Optional: install from the command line
+
+For **Desktop**, use the `dsh` shipped with the desktop installation; the ordinary npm CLI may not manage Desktop. Launch Desktop at least once to initialize its profile, then fully exit the app, including its background tray process, before running:
+
+```bash
+dsh plugin --profile desktop add github:z905888415-beep/dsh-claude-style-my-character#dist
+```
+
+For the **web app**, run:
+
+```bash
+dsh plugin --profile web add github:z905888415-beep/dsh-claude-style-my-character#dist
+```
+
+Reopen the corresponding app, enable the plugin and restart when prompted. Installation through the GUI does not require exiting Desktop first. See the [official DeepSeek Harness plugin publishing guide](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md) for configuration layers and GitHub package installation.
+
+<details>
+<summary>For developers: build and install from source</summary>
+
+Requires Node.js, npm and a compatible DeepSeek Harness installation.
 
 ```bash
 git clone https://github.com/z905888415-beep/dsh-claude-style-my-character.git
@@ -66,9 +104,15 @@ npm run build
 dsh plugin --profile web add .
 ```
 
-This fork retains the plugin identifier `dsh-claude-style`. Enable one edition of the theme in a profile, then restart DeepSeek Harness. In the plugin's Appearance settings, select **Claude** for the brand, **My Character** for the mascot and the desired placement.
+This example targets the web profile. For Desktop, use its bundled `dsh`, replace `web` with `desktop` and fully exit the app first as described above. Enable the plugin and restart the host after installation.
 
 The character pack lives in [`packages/assets/src/mascot/custom/`](packages/assets/src/mascot/custom/): eight transparent PNG sheets and [`manifest.json`](packages/assets/src/mascot/custom/manifest.json). Source frames are 256 × 256 px, with eight frames per row, a default interval of 50 ms and a 96 × 96 px display canvas. Rebuild and restart the host after replacing the assets.
+
+</details>
+
+### Publish a new version as maintainer
+
+Update the version, commit the source, then open this repository's **Actions → Publish My Character → Run workflow** to publish manually. Each release needs an unused version number. The workflow builds and updates `dist`, creates a fixed version tag and a GitHub Release, and does not publish to npm. Pushing source changes alone does not update the `dist` installation.
 
 ## Inherited upstream features
 

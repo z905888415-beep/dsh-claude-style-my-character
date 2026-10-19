@@ -15,6 +15,7 @@
 | 状态接入 | 八组基础动画映射至 18 种角色状态，覆盖工作、等待、完成、点击、唤醒与并行工作。 |
 | 构建与资源通道 | 读取 PNG 与清单，检查尺寸和透明背景，生成角色包；二进制 PNG 按原始字节提供，文本资源保留原有 Brotli 路径。 |
 | 文档预览 | 新增本角色八状态 GIF；上游主题截图及 Deepy GIF 在 README 中明确标为继承的功能展示。 |
+| 预构建安装与首次默认值 | 通过 GitHub `dist` 分支安装，无需用户自行构建；首次安装使用 Claude、我的角色、首页与对话。已有配置保留用户偏好，需在外观中手动选择角色。 |
 
 角色包见 [`packages/assets/src/mascot/custom/`](../packages/assets/src/mascot/custom/)，状态映射见 [`custom-sheets.ts`](../packages/client/src/features/mascot/custom-sheets.ts)。GIF 用于文档展示，运行时使用 PNG 精灵图。
 
@@ -41,7 +42,11 @@
 
 ## 安装与素材来源
 
-本二改尚未发布 npm 包，安装步骤见 [README](../README.md#安装本二改版)。本二改沿用 `dsh-claude-style` 插件标识以兼容宿主，npm 上的同名上游发行版不会自动包含本次角色修改。
+推荐在 DeepSeek Harness 的「插件 → 添加插件」中安装 `github:z905888415-beep/dsh-claude-style-my-character#dist`，安装后点击「立即启用」并按提示重启。固定版本使用 `#v0.16.3-my-character.2`，安装包与记录见 [Releases](https://github.com/z905888415-beep/dsh-claude-style-my-character/releases)。详细的桌面 / 网页 CLI 以及开发者源码安装步骤见 [README](../README.md#安装本二改版)。
+
+`dist` 提供构建产物，用户无需 clone、安装开发依赖、构建或批准 `prepare` 脚本。本二改尚未发布 npm 包；npm 上的同名上游发行版不会自动包含本次角色修改。本二改沿用包名及插件标识 `dsh-claude-style`，替换同一个插件入口，不提供两套并行主题，也不会删除用户会话。首次安装采用自有角色默认值；已有主题配置的用户需在「外观」中手动选择「Claude＋我的角色」及出现位置。
+
+维护者通过 **Actions → Publish My Character → Run workflow** 手动发布未使用过的版本号，生成 `dist` 分支、固定版本标签和 GitHub Release，不发布到 npm。普通源码推送不会自动更新安装分支。
 
 角色参考图由本二改仓库维护者提供，八段动作视频由维护者使用 Grok 生成，再经本地绿幕抠像、位置统一、抽帧与循环整理，导出透明 PNG 精灵图。该来源说明不构成对角色素材授予 MIT 许可；角色形象、生成素材及其后续使用的权利单独保留，复用应先取得相应授权。
 
@@ -62,6 +67,7 @@ The Claude / DeepSeek themes, existing mascots, interface settings, state schedu
 | State integration | Eight base animations map to 18 character states, covering work, waiting, completion, clicks, waking and concurrent work. |
 | Build and asset route | Read PNGs and a manifest, validate dimensions and transparency, then build the pack. Binary PNGs retain their original bytes; text assets retain the existing Brotli route. |
 | Documentation previews | Add eight GIF previews for this character and identify the retained upstream theme screenshots and Deepy GIFs as inherited features. |
+| Prebuilt installation and fresh defaults | Install from the GitHub `dist` branch without building locally. Fresh installations use Claude, My Character, and home plus conversations. Existing configurations keep user preferences and may require selecting the character in Appearance. |
 
 See the [character pack](../packages/assets/src/mascot/custom/) and [`custom-sheets.ts`](../packages/client/src/features/mascot/custom-sheets.ts). GIFs are documentation previews; the running plugin uses PNG sprite sheets.
 
@@ -88,7 +94,11 @@ Checks cover mascot switching, removal when disabled, frame offsets and display 
 
 ## Installation and asset provenance
 
-This fork has not been published to npm. Follow the [README installation steps](../README.en.md#install-this-fork). It retains the `dsh-claude-style` plugin identifier for host compatibility; the upstream npm package with that name does not automatically include these changes.
+In DeepSeek Harness, go to **Plugins → Add plugin** and install `github:z905888415-beep/dsh-claude-style-my-character#dist`, then click **Enable now** and restart when prompted. Pin a version with `#v0.16.3-my-character.2`; packages and release notes are on [Releases](https://github.com/z905888415-beep/dsh-claude-style-my-character/releases). See the [README installation steps](../README.en.md#install-this-fork) for Desktop / web CLI commands and optional source installation.
+
+The `dist` branch provides built artifacts, so users do not need to clone, install development dependencies, build, or approve a `prepare` script. This fork has not been published to npm; the upstream npm package does not automatically include these changes. The fork retains the `dsh-claude-style` package name and plugin identifier, replacing the same plugin entry rather than adding a second independent theme. Installation does not delete user conversations. Fresh installations use the custom defaults; existing theme configurations require selecting Claude, My Character and placement in Appearance when desired.
+
+Maintainers manually run **Actions → Publish My Character → Run workflow** with an unused version number to produce the `dist` branch, a fixed version tag and a GitHub Release. It does not publish to npm, and ordinary source pushes do not update the installation branch.
 
 The fork maintainer supplied the character reference artwork and generated the eight source videos using Grok. Local processing removes the green background, aligns the character, extracts frames and prepares loops, producing transparent PNG sprite sheets. This provenance statement does not grant the character assets an MIT license. Rights to the character, generated assets and their subsequent use remain separately reserved; obtain the applicable permission before reuse.
 
