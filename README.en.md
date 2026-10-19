@@ -59,6 +59,8 @@ GIFs are documentation previews; the plugin uses transparent PNG sprite sheets a
 
 ### Recommended: add it in the interface
 
+If your current installation uses a local source `link:`, detach the plugin directory link while preserving the source directory before migrating. Do not install over that link: local verification found that the Windows package manager could modify the link target when replacing a directory link. Fresh installations and existing prebuilt installations can follow these steps.
+
 1. Open DeepSeek Harness and go to **Plugins → Add plugin**.
 2. Paste this full address and install:
 
