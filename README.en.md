@@ -62,7 +62,7 @@ GIFs are documentation previews; the plugin uses transparent PNG sprite sheets a
 If your current installation uses a local source `link:`, detach the plugin directory link while preserving the source directory before migrating. Do not install over that link: local verification found that the Windows package manager could modify the link target when replacing a directory link. Fresh installations and existing prebuilt installations can follow these steps.
 
 1. Open DeepSeek Harness and go to **Plugins → Add plugin**.
-2. Paste this full address and install:
+2. Paste the full address below into **Plugin address**. Keep **Installation source** at its default or select **Official npm registry**, then install. Do not enter the GitHub repository URL as the installation source:
 
    ```text
    github:z905888415-beep/dsh-claude-style-my-character#dist
@@ -70,6 +70,8 @@ If your current installation uses a local source `link:`, detach the plugin dire
 
 3. After installation, click **Enable now** and restart DeepSeek Harness when prompted.
 4. A fresh installation defaults to **Claude + My Character**, with the character on **home and conversations**. Existing theme configurations retain saved preferences: open the plugin's **Appearance** settings and select **Claude**, **My Character** and the desired placement.
+
+If installation reports a `404` for packages such as `dsh-ops`, or the log contains `--registry=https://github.com/...`, reset **Installation source** to its default or **Official npm registry**, then retry. An incorrect registry may also appear as a GitHub network error in the interface.
 
 The `dist` branch ships the built plugin and all eight character animations. Users do not need to clone the repository, run `npm ci` / `npm run build`, or approve a source `prepare` build script. This fork has not been published to npm; installing the npm package `dsh-claude-style` installs the upstream edition.
 
