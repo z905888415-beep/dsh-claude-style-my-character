@@ -2,6 +2,32 @@
 
 This package includes material from the projects below. Each keeps its own license; the MIT license of this package does not relicense it.
 
+## Upstream project: Nwflower/dsh-claude-style
+
+This is a derivative (二次修改 / 二改) of
+[Nwflower/dsh-claude-style](https://github.com/Nwflower/dsh-claude-style),
+based on upstream commit
+[`93490c73f21e18041790cc572db31603fecc3ad7`](https://github.com/Nwflower/dsh-claude-style/commit/93490c73f21e18041790cc572db31603fecc3ad7).
+The original theme, runtime, state machine, build tools and existing artwork
+are credited to the upstream project and their respective contributors.
+The original `Copyright (c) 2026 Nwflower` and MIT license are retained in
+`LICENSE`, together with its font and artwork exceptions.
+
+This fork adds the My Character mascot choice, eight custom transparent
+animations, direct PNG asset handling, complete state mapping and regression
+checks. The detailed changes and source links are in
+[`docs/FORK_CHANGES.md`](docs/FORK_CHANGES.md).
+
+## Character pack added by this fork
+
+The maintainer, z905888415-beep, supplied the character reference artwork and
+Grok-generated motion clips. The clips were processed locally into transparent
+PNG sprite sheets and looping previews for this fork. These assets retain
+their separate rights and are excluded from the code's MIT license as stated
+in `LICENSE`; publishing this fork does not license the character artwork as
+a general-purpose asset pack. The original MP4 clips and local configuration
+files are not included.
+
 ## dsh-chat-ux
 
 The chat area's folding (`packages/client/src/features/chat-fold/`), the token reveal (`packages/client/src/features/chat-reveal/`), the send flight (`packages/client/src/features/chat-send/`), the enhanced follow and the capped process group's follow (`packages/client/src/features/chat-follow/`) and the composer caret (`packages/client/src/features/caret/`) are ported from dsh-chat-ux. The ported source files name it in their headers, and each of those features stands down while that plugin is on the page.

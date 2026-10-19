@@ -907,6 +907,14 @@ plays its reaction.
 
 ## Implementation notes
 
+**My Character.** The independently selected illustrated mascot uses the same
+composer positions and state machine. Its transparent PNG sheets keep their
+original RGBA colours and scale smoothly to the pack's display size (96px in
+the supplied pack), at eight frames per row. All eight source animations use
+one square canvas so their feet and scale stay fixed when a state changes.
+The pack declares a still frame for each animation; reduced motion holds that
+frame, while clicks and pulls retain the shared player's reactions.
+
 - Every rule is scoped under `body[data-dsh-claude-style]`.
 - Dark tokens are the base; light overrides use `:not([data-ds-dark-theme])`.
 - A surface's stylesheet sits beside its feature under `packages/client/src/features/<feature>/`;

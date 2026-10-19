@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "columns": 8,
+  "frameSize": 256,
+  "displaySize": 96,
+  "frameMs": 50,
+  "sheets": {
+    "idle": {
+      "file": "idle.png",
+      "frames": 96,
+      "still": 0
+    },
+    "thinking": {
+      "file": "thinking.png",
+      "frames": 36,
+      "still": 0
+    },
+    "typing": {
+      "file": "typing.png",
+      "frames": 101,
+      "still": 0
+    },
+    "conducting": {
+      "file": "conducting.png",
+      "frames": 78,
+      "still": 0
+    },
+    "notification": {
+      "file": "notification.png",
+      "frames": 65,
+      "still": 0
+    },
+    "error": {
+      "file": "error.png",
+      "frames": 81,
+      "still": 0
+    },
+    "happy": {
+      "file": "happy.png",
+      "frames": 111,
+      "still": 0
+    },
+    "sleeping": {
+      "file": "sleeping.png",
+      "frames": 34,
+      "still": 0
+    }
+  }
+}

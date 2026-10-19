@@ -2,6 +2,37 @@
 const { MARKUP, SKIN_FACE, SKIN_HAT, same, check, contrast, basicChecks, commonChecks } = require('./_shared.cjs')
 
 module.exports = {
+  'custom-mascot'(r) {
+    basicChecks(r)
+    const custom = r.custom || {}
+    const animations = custom.animations || {}
+    const names = ['idle', 'thinking', 'typing', 'conducting', 'notification', 'error', 'happy', 'sleeping']
+    const fits = state => state && state.width === 96 && state.height === 96 && state.spriteWidth === 96 && state.spriteHeight === 96 && state.overflow === 'hidden'
+    check('the selected custom character keeps the Claude interface brand and stands alone',
+      custom.brand === 'claude' && custom.mascot === 'custom' && custom.otherMascots === 0,
+      JSON.stringify({ brand: custom.brand, mascot: custom.mascot, others: custom.otherMascots }))
+    check('the illustrated viewport clips to a 96px square in both palettes',
+      fits(custom.light) && fits(custom.dark), JSON.stringify({ light: custom.light, dark: custom.dark }))
+    const played = names.map(name => animations[name])
+    check('all eight original PNG sheets load and advance in exact 96px frame steps', played.every((animation, index) => {
+      if (!animation || !animation.first || !animation.after) return false
+      const first = animation.first
+      const after = animation.after
+      const offsets = after.frame.split(' ').map(parseFloat)
+      return first.ready && after.ready && after.animation === names[index] && first.frame !== after.frame &&
+        offsets.every(value => Number.isFinite(value) && value % 96 === 0) &&
+        /^url\("https?:\/\/[^\"]*\/dsh-claude-style\/assets\/[0-9a-f]{12}\.png"\)$/.test(after.sheet)
+    }), JSON.stringify(animations))
+    check('each base state uses its own supplied animation sheet',
+      new Set(played.map(animation => animation && animation.after && animation.after.sheet)).size === 8,
+      JSON.stringify(played.map(animation => animation && animation.after && animation.after.sheet)))
+    check('reduced motion holds the selected custom still frame',
+      custom.still && custom.still.before && custom.still.after && custom.still.before.frame === custom.still.after.frame,
+      JSON.stringify(custom.still))
+    check('Off removes the character and its composer anchor', custom.off === null && custom.anchors === 0,
+      JSON.stringify({ off: custom.off, anchors: custom.anchors }))
+    commonChecks(r)
+  },
   'crab-states'(r) {
     basicChecks(r)
     const crab = r.states || {}

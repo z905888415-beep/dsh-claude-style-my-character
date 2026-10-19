@@ -29,7 +29,7 @@ export interface MascotSheets {
  * built from the name, and the build reads the marks the stylesheets key on
  * off this type (scripts/source-tree.mjs).
  */
-export type MascotName = 'crab' | 'deepy'
+export type MascotName = 'crab' | 'deepy' | 'custom'
 
 /** What one character hands the player (see createMascotPlayer). */
 export interface MascotCharacter {
@@ -37,6 +37,8 @@ export interface MascotCharacter {
   sheets: Record<string, MascotSheet>
   frameMs: number
   gutter?: number
+  /** The illustrated pack's CSS canvas size; existing pixel grids keep their own sizes. */
+  displaySize?: number
   extras: string[]
   createSheets(onReady: () => void): MascotSheets
 }
@@ -58,13 +60,14 @@ export interface MascotCharacter {
  * placement slot or activity service retires the host reads here.
  *
  * @param ui - shared handle table (`ui.composer`).
- * @param character - `{ name, sheets, frameMs, gutter, extras, createSheets }`:
+ * @param character - `{ name, sheets, frameMs, gutter, displaySize, extras, createSheets }`:
  *     `name` prefixes the class names, the custom properties and the anchor
  *     mark (`dsh-claude-<name>`); `sheets` is the animation table
  *     (`{ frames, box, still }` per key, every key the signals, moments,
  *     sleep, extras and reactions name); `gutter` the transparent margin
  *     each frame cell carries in the character's sheets, in logical pixels
- *     (absent when they carry none); `extras` the idle extras;
+ *     (absent when they carry none); `displaySize` the optional CSS canvas
+ *     size; `extras` the idle extras;
  *     `createSheets(onReady)` returns `{ ready, failed, paint, dispose }`.
  * @returns `{ sync, release, onActivity, dispose }`.
  */
@@ -118,6 +121,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   function build() {
     const built = buildElement('span', PREFIX)
     built.setAttribute('aria-hidden', 'true')
+    if (character.displaySize !== undefined) built.style.setProperty(`--${PREFIX}-size`, `${character.displaySize}px`)
     sprite = buildElement('span', `${PREFIX}-sprite`)
     strip = buildElement('span', `${PREFIX}-strip`)
     sprite.appendChild(strip)

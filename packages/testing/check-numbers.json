@@ -750,10 +750,23 @@
       ]
     },
     "packages/testing/smoke/cases/mascot.cjs": {
+      "the selected custom character keeps the Claude interface brand and stands alone": [
+        0
+      ],
+      "all eight original PNG sheets load and advance in exact 96px frame steps": [
+        0,
+        96
+      ],
+      "each base state uses its own supplied animation sheet": [
+        8
+      ],
+      "Off removes the character and its composer anchor": [
+        0
+      ],
       "its frames change on its own node without waking a pass": [
         0
       ],
-      "its frames change on its own node without waking a pass (line 64)": [
+      "its frames change on its own node without waking a pass (line 95)": [
         0
       ]
     },

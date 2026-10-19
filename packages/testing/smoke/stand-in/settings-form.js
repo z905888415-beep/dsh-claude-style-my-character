@@ -26,6 +26,7 @@
   var formValue = { username: username, collapseFooter: true, homeLayout: CASE === 'studio' ? 'studio' : 'classic', brand: CASE === 'deepy' ? 'off' : undefined }
   // The crab-states case picks the crab, whose states it walks through.
   if (CASE === 'crab-states') formValue.mascot = 'crab'
+  if (CASE === 'custom-mascot') Object.assign(formValue, { brand: 'claude', mascot: 'custom', motion: 'full' })
   // The stats-inline case drives the line of their own, which is the shipped
   // default; the two popover cases ask the numbers back into the panel.
   if (CASE === 'stats-inline') formValue.statsPosition = 'inline'

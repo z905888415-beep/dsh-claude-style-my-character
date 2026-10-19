@@ -1,0 +1,12 @@
+{
+  "group": "new",
+  "order": 0,
+  "at": "2026-10-19",
+  "external": true,
+  "zh": "**二改版 · 我的角色**：基于 Nwflower/dsh-claude-style 新增独立于界面品牌的自有角色选项，保留 Claude 界面与原角色，以八组透明动画共 602 帧覆盖 18 种角色状态，并支持本地 PNG 角色包构建与二进制资源原样加载。",
+  "en": "**My Character fork**: this derivative of Nwflower/dsh-claude-style preserves the Claude interface and original mascots while adding an independent character option, eight transparent animations with 602 frames mapped to 18 character states, local PNG pack builds and unchanged binary asset delivery.",
+  "validation": {
+    "zh": "新增冒烟数值记录中的 0 表示没有其他吉祥物、关闭后没有角色锚点及帧偏移整除后的余数为零；96 是本地角色包约定的显示画布与动画步幅；8 是用户提供的八种基础动画数量。这些数值核对角色包契约，没有放宽既有检查。Deepy 的重复同名动效检查仅因前方新增用例，从第 64 行移至第 95 行，判定仍为零次调度。公共资源检查按清单选择 Brotli 文本，保留压缩与解压验证，并另以源码 PNG 的内容哈希和逐字节结果验证二进制通道在接受或不接受 Brotli 时均保持原样。",
+    "en": "New smoke records use 0 for no competing mascots, no anchors after Off, and zero remainder for whole-frame offsets; 96 is the local pack's display canvas and animation step; 8 is the supplied base-animation count. These verify the character-pack contract without relaxing existing checks. The duplicate-named Deepy motion check moved from line 64 to line 95 because the new case precedes it; its accepted scheduler-pass count remains zero. Public-asset checks select Brotli text by manifest encoding to retain compression coverage, then compare the PNG route byte for byte with the source PNG under its content hash both with and without Brotli negotiation."
+  }
+}

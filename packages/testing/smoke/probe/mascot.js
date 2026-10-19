@@ -9,6 +9,28 @@
   var sleep = probe.sleep
   var r = probe.report
 
+  /** Read the real viewport and animated sheet for each selectable character. */
+  probe.mascotState = function (name) {
+    var node = document.querySelector('.dsh-claude-' + name)
+    if (node === null) return null
+    var strip = node.querySelector('.dsh-claude-' + name + '-strip')
+    var sprite = node.querySelector('.dsh-claude-' + name + '-sprite')
+    var matrix = getComputedStyle(strip).transform
+    var offsets = matrix === 'none' ? null : matrix.match(/matrix\([^,]+,[^,]+,[^,]+,[^,]+,\s*(-?[\d.]+),\s*(-?[\d.]+)\)/)
+    var rootBox = node.getBoundingClientRect()
+    var spriteBox = sprite.getBoundingClientRect()
+    return {
+      animation: node.getAttribute('data-animation'),
+      ready: node.hasAttribute('data-ready'),
+      place: node.parentElement === null ? null : node.parentElement.getAttribute('data-dsh-claude-' + name + '-anchor'),
+      frame: offsets === null ? '0px 0px' : offsets[1] + 'px ' + offsets[2] + 'px',
+      sheet: getComputedStyle(strip).backgroundImage,
+      width: rootBox.width, height: rootBox.height,
+      spriteWidth: spriteBox.width, spriteHeight: spriteBox.height,
+      overflow: getComputedStyle(sprite).overflow,
+    }
+  }
+
   probe.step(async function () {
     // The DeepSeek brand, stored under its old name ("off"): the whale takes
     // the crab's place and the canvas turns sky white. On the home page it
@@ -18,22 +40,7 @@
     await probe.onlyFor(['deepy', 'crab-states'], async function () {
       var mascotName = window.SMOKE_CASE === 'deepy' ? 'deepy' : 'crab'
       var driver = window.__deepy
-      var whaleNow = function () {
-        var node = document.querySelector('.dsh-claude-' + mascotName)
-        if (node === null) return null
-        // The frame is the strip's translation: read the computed matrix (a
-        // running WAAPI animation has no inline style) as "Xpx Ypx".
-        var strip = node.querySelector('.dsh-claude-' + mascotName + '-strip')
-        var matrix = getComputedStyle(strip).transform
-        var offsets = matrix === 'none' ? null : matrix.match(/matrix\([^,]+,[^,]+,[^,]+,[^,]+,\s*(-?[\d.]+),\s*(-?[\d.]+)\)/)
-        return {
-          animation: node.getAttribute('data-animation'),
-          ready: node.hasAttribute('data-ready'),
-          place: node.parentElement === null ? null : node.parentElement.getAttribute('data-dsh-claude-' + mascotName + '-anchor'),
-          frame: offsets === null ? '0px 0px' : offsets[1] + 'px ' + offsets[2] + 'px',
-          sheet: getComputedStyle(strip).backgroundImage,
-        }
-      }
+      var whaleNow = function () { return probe.mascotState(mascotName) }
       var wakeDeepyPass = function () {
         var node = document.createElement('span')
         document.body.appendChild(node)

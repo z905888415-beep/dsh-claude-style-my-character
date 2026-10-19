@@ -1,0 +1,53 @@
+/* Illustrated sheets keep their RGBA pixels; the source resolution is scaled
+   smoothly into the manifest's display size (docs/STYLE.md). */
+body[data-dsh-claude-style] .dsh-claude-custom {
+  position: absolute;
+  right: 8px;
+  bottom: 100%;
+  z-index: 1;
+  width: var(--dsh-claude-custom-size);
+  height: var(--dsh-claude-custom-size);
+  pointer-events: none;
+}
+
+body[data-dsh-claude-style] .dsh-claude-custom:not([data-ready]) {
+  visibility: hidden;
+}
+
+body[data-dsh-claude-style] :is([data-dsh-claude-custom-anchor="stack"], [data-dsh-claude-custom-anchor="panel"]) {
+  position: relative;
+}
+
+body[data-dsh-claude-style] [data-dsh-claude-custom-anchor="stack"] > .dsh-claude-custom {
+  right: calc(max(var(--dsh-composer-side-clearance, 16px), (100% - var(--dsh-composer-card-max-width, 100%)) / 2) + 8px);
+}
+
+body[data-dsh-claude-style] [data-dsh-claude-custom-anchor="panel"] > .dsh-claude-custom {
+  right: calc(max(var(--dsh-composer-side-clearance, 16px) + 16px, (100% - var(--dsh-chat-content-width, 100%)) / 2) + 8px);
+  bottom: calc(100% - 7px);
+}
+
+body[data-dsh-claude-style] .dsh-claude-custom-sprite {
+  position: absolute;
+  inset: 0;
+  width: var(--dsh-claude-custom-size);
+  height: var(--dsh-claude-custom-size);
+  overflow: hidden;
+}
+
+body[data-dsh-claude-style] .dsh-claude-custom-strip {
+  display: block;
+  width: calc(var(--dsh-claude-custom-cell-w, 0) * 16px);
+  height: calc(var(--dsh-claude-custom-strip-h, 0) * 2px);
+  background-image: var(--dsh-claude-custom-sheet, none);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+/* Keep the empty side margins free for the composer's own controls. */
+body[data-dsh-claude-style] .dsh-claude-custom-hit {
+  position: absolute;
+  inset: 12% 18% 2%;
+  pointer-events: auto;
+  touch-action: none;
+}

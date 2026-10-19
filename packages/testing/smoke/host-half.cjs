@@ -10,6 +10,7 @@ const path = require('path')
 const { Readable } = require('stream')
 const { pathToFileURL } = require('url')
 const { brotliDecompressSync } = require('zlib')
+const { createHash } = require('crypto')
 const { ROOT, HOST, SKIN_FIXTURE, same, check } = require('./shared.cjs')
 const { hostUsage } = require('./host-half-usage.cjs')
 
@@ -472,8 +473,8 @@ async function hostHalf() {
   // and nothing else answers however the name is spelled.
   console.log('\nhost half — public assets')
   const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'lib', 'assets', 'manifest.json'), 'utf8')).assets
-  const [assetName, asset] = Object.entries(manifest)[0] ?? []
-  if (assetName === undefined) throw new Error('no routed assets in lib/assets/manifest.json; run npm run build')
+  const [assetName, asset] = Object.entries(manifest).find(([, entry]) => entry.encoding === 'br') ?? []
+  if (assetName === undefined) throw new Error('no brotli text asset in lib/assets/manifest.json; run npm run build')
   // Every name the manifest carries has its file: the manifest is what the
   // route answers from, so an entry an earlier build's cleanup removed (D72)
   // would have the route refuse a name the manifest promises.
@@ -494,6 +495,21 @@ async function hostHalf() {
     plain.status === 200 && plain.headers['content-encoding'] === undefined &&
       plain.raw !== null && plain.raw.toString('utf8') === brotliDecompressSync(fs.readFileSync(storedPath)).toString('utf8'),
     `HTTP ${plain.status} ${JSON.stringify(plain.headers)}`)
+  // The illustrated pack is binary: accepting brotli must still return the
+  // source PNG unchanged, including its alpha channel.
+  const pngBytes = fs.readFileSync(path.join(ROOT, 'packages', 'assets', 'src', 'mascot', 'custom', 'idle.png'))
+  const pngName = createHash('sha256').update(pngBytes).digest('hex').slice(0, 12) + '.png'
+  const pngAsset = manifest[pngName]
+  check('the original custom PNG is routed under its own content hash as an uncompressed image',
+    pngAsset?.type === 'image/png' && pngAsset.encoding === null && pngAsset.bytes === pngBytes.length,
+    JSON.stringify({ name: pngName, asset: pngAsset }))
+  for (const headers of [{}, { 'accept-encoding': 'gzip, br' }]) {
+    const png = await requestAsset(assets, `/dsh-claude-style/assets/${pngName}`, headers)
+    check(`a PNG asset retains its exact source bytes ${headers['accept-encoding'] === undefined ? 'without compression negotiation' : 'when brotli is accepted'}`,
+      png.status === 200 && png.headers['content-type'] === 'image/png' && png.headers['content-encoding'] === undefined &&
+        /immutable/.test(png.headers['cache-control']) && Buffer.isBuffer(png.raw) && png.raw.equals(pngBytes),
+      `HTTP ${png.status} ${JSON.stringify(png.headers)}`)
+  }
   for (const url of ['/dsh-claude-style/assets/missing.svg', '/dsh-claude-style/assets/..%2fclient.js',
     '/dsh-claude-style/assets/../../package.json', '/dsh-claude-style/assets/', `/dsh-claude-style/assets/${assetName}/x`]) {
     const answer = await requestAsset(assets, url)

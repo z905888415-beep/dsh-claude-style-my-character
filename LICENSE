@@ -47,4 +47,12 @@ These files, and their copies inlined into `lib/client.js`, are **not** covered
 by the MIT license above. This plugin is an unofficial fan work, not affiliated
 with or endorsed by Anthropic.
 
+Custom character artwork notice: the character artwork and animation previews
+under `packages/assets/src/mascot/custom/` and `docs/custom-character/`, and
+their copies in `lib/assets/`, were supplied for this fork by its maintainer,
+z905888415-beep. The maintainer authorized their inclusion in this repository.
+Rights in the character artwork remain with their respective owners; these
+assets are not covered by the MIT license above. Separate reuse or distribution
+of the character artwork requires permission from the rights holder.
+
 

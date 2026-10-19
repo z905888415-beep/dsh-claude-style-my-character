@@ -61,6 +61,7 @@ const PROBE_PARTS = [
   'shell-palette.js',
   'brand.js',
   'mascot.js',
+  'custom-mascot.js',
   'chat-motion.js',
   'chat-files.js',
   'chat-send.js',

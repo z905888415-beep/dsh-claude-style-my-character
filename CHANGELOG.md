@@ -6,7 +6,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 [中文](#cn-unreleased) | [English](#en-unreleased)
 
-<h3 id="cn-unreleased">体验优化</h3>
+<h3 id="cn-unreleased">新增功能</h3>
+
+- **二改版 · 我的角色**：基于 Nwflower/dsh-claude-style 新增独立于界面品牌的自有角色选项，保留 Claude 界面与原角色，以八组透明动画共 602 帧覆盖 18 种角色状态，并支持本地 PNG 角色包构建与二进制资源原样加载。
+
+### 体验优化
 
 - **右侧栏的收起键站到顶栏右端**：面板打开时，头部那一行的右端出现一枚收起按钮，面板里原来那一枚让位；按下它面板收起，宿主的打开按钮回到原处。宿主那枚搬不出来——它挂在带 transform 且被裁剪的子树里，fixed 定位会被量到面板的坐标、再被面板的边裁掉。
 - **设置页的说明改成一句话，能省的就省**：此前有的写着整段——把开关两种状态各自的样子、每个选项分别是什么都讲一遍——有的只有一句，有的干脆不写；现在每条说明只说这一项给你什么，标题与选项已经说清的那几行只剩标题与控件。
@@ -19,7 +23,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 - **README 收成展示文案**：中英两份都以截图与动画帧为主，预览各配一行说明，安装收成两个命令块，鸣谢由四段正文改成四条；读者要的细节留在文档表指向的几份文件里。
 
-<h3 id="en-unreleased">Improvements</h3>
+<h3 id="en-unreleased">New Features</h3>
+
+- **My Character fork**: this derivative of Nwflower/dsh-claude-style preserves the Claude interface and original mascots while adding an independent character option, eight transparent animations with 602 frames mapped to 18 character states, local PNG pack builds and unchanged binary asset delivery.
+
+### Improvements
 
 - **The right panel's collapse control stands at the top bar's right end**: while the panel is open, a collapse button appears at the right end of the header's row and the panel's own copy steps aside; pressing it closes the panel and the host's open button returns. The host's own control cannot be moved there — it hangs from a transformed, clipped subtree, where a fixed box is measured from the panel and cut at its edge.
 - **Settings descriptions say one clause, and only where it adds something**: a line that used to spell out both states of a switch and every choice beside it now says only what the setting gives the reader, and a row whose title and choices already say it carries no line at all.

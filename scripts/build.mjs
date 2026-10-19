@@ -51,7 +51,8 @@ import { brotliCompressSync } from 'node:zlib'
 import esbuild from 'esbuild'
 import { PNG } from 'pngjs'
 import { buildHostHalf } from '../packages/host/build.mjs'
-import { buildFonts, checkClaimed, checkSheetPixels, checkSheets, planAssets, routeText, vectorizeSheet, writeAssets } from '../packages/assets/assets.mjs'
+import { SOURCE_ONLY, buildFonts, checkClaimed, checkSheetPixels, checkSheets, planAssets, routeText, vectorizeSheet, writeAssets } from '../packages/assets/assets.mjs'
+import { CUSTOM_MANIFEST, loadCustomMascot } from '../packages/assets/custom-mascot.mjs'
 import { openBuildCache } from './build-cache.mjs'
 import { checkContracts, checkCycles, checkDependencies, checkListed, checkManifests, checkMotionSources, checkScrollOwner, checkTypes } from './build-checks.mjs'
 import { chunkFiles, chunkModules, ownModuleIds, splitChunks } from './chunks.mjs'
@@ -219,6 +220,7 @@ const FACTORY_CLOSE = `    return module.exports
 const CONSTANTS = (() => {
   const constantsFile = 'packages/client/src/constants.ts'
   const sheetsFile = 'packages/client/src/features/mascot/sheets.ts'
+  const customFile = 'packages/client/src/features/mascot/custom-sheets.ts'
   const constants = loadModule(constantsFile)
   const sheets = loadModule(sheetsFile)
   const pick = (module, file, names) => Object.fromEntries(names.map((name) => {
@@ -237,6 +239,7 @@ const CONSTANTS = (() => {
       brand: { attribute: BRAND_ATTR, deepseek: BRAND_DEEPSEEK },
     },
     ...pick(sheets, sheetsFile, ['CRAB_SHEETS', 'DEEPY_SHEETS', 'DEEPY_SCALE', 'DEEPY_GUTTER']),
+    ...pick(loadModule(customFile), customFile, ['CUSTOM_ANIMATIONS']),
     featureSheets: pick(constants, constantsFile, FEATURE_SHEET_CONSTANTS),
   }
 })()
@@ -349,7 +352,7 @@ async function main() {
   // build must leave lib/ as it was.
   const cache = openBuildCache(CACHE_DIR)
   const deepy = vectorizeDeepySheets(cache)
-  const plan = planAssets({ assetsDir: ASSETS, generated: deepy.generated, replaced: deepy.replaced })
+  const plan = planAssets({ assetsDir: ASSETS, generated: deepy.generated, replaced: deepy.replaced, sourceOnly: new Set([...SOURCE_ONLY, CUSTOM_MANIFEST]) })
   const claimed = new Set()
   const images = {}
   for (const file of BRAND_MARKS) {
@@ -381,6 +384,7 @@ async function main() {
     claimed.add(entry.file)
     deepyUrls[name] = entry.url
   }
+  const customMascot = loadCustomMascot(ASSETS, plan, claimed, CONSTANTS.CUSTOM_ANIMATIONS)
   checkClaimed(plan, claimed)
 
   const tokenDoc = loadTokens(SRC)
@@ -408,6 +412,7 @@ async function main() {
     // for its build: the account Remote carries it on every call.
     CLIENT_VERSION: PACKAGE.version,
     CRAB_SHEET_URLS: crab,
+    CUSTOM_MASCOT: customMascot,
     DEEPY_SHEET_URLS: deepyUrls,
     // The motion tokens, by name: the browser half reads the same table the
     // generated token stylesheet carries, so a duration cannot be 200 ms in the
