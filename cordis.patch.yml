@@ -1,0 +1,8 @@
+# My Character fork defaults; profile settings remain the user's final layer.
+- insert:
+    - id: ui-skin-claude-style
+      name: 'dsh-claude-style'
+      config:
+        brand: claude
+        mascot: custom
+        mascotScope: all
