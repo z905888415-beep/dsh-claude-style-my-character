@@ -30,6 +30,8 @@ jobs:
   # package to it: the smoke there is a gate the promotion waits on, as it is in
   # CI.
   smoke-windows:
+    # This inherited pipeline publishes the upstream npm package, not the fork.
+    if: github.repository == 'Nwflower/dsh-claude-style'
     runs-on: windows-latest
     timeout-minutes: 20
     steps:
@@ -43,6 +45,7 @@ jobs:
       - run: npm run smoke
 
   release:
+    if: github.repository == 'Nwflower/dsh-claude-style'
     needs: smoke-windows
     runs-on: ubuntu-latest
     timeout-minutes: 90

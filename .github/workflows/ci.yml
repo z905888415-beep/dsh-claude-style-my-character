@@ -1,6 +1,7 @@
 name: CI
 
-# The whole matrix is judged on a push to master, a pull request, a merge-queue
+# The whole matrix is judged on a push to master or the fork's my-character
+# branch, a pull request, a merge-queue
 # entry and a manual run. A branch is judged through its pull request or the
 # queue, so a branch push of its own is not read here, and `branches` keeps every
 # other push out, tag pushes with them: the release workflow owns tags.
@@ -62,7 +63,7 @@ name: CI
 # shards, and GitHub's reading of a skipped job is what the aggregation rests on.
 on:
   push:
-    branches: [master]
+    branches: [master, my-character]
   pull_request:
   merge_group:
   workflow_dispatch:
@@ -188,7 +189,7 @@ jobs:
   # scripted model service, driven through a real conversation (D66).
   e2e:
     needs: [changed, checks]
-    if: needs.changed.outputs.code == 'true' && (github.event_name != 'push' || github.ref == 'refs/heads/master')
+    if: needs.changed.outputs.code == 'true' && (github.event_name != 'push' || github.ref == format('refs/heads/{0}', github.event.repository.default_branch))
     strategy:
       # One shard's failure is evidence about that shard; the others finish and
       # report their own.

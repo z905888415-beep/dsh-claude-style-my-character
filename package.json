@@ -1,7 +1,7 @@
 {
   "name": "dsh-claude-style",
-  "description": "Claude Code Desktop theme for DeepSeek Harness (dsh) web GUI — visual & interaction overhaul",
-  "version": "0.16.3",
+  "description": "My Character derivative of Nwflower/dsh-claude-style: Claude interface with eight custom mascot animations for DeepSeek Harness",
+  "version": "0.16.3-my-character.1",
   "type": "module",
   "main": "lib/host/index.js",
   "icon": "lib/claude-mark.svg",
@@ -72,13 +72,14 @@
   ],
   "license": "MIT",
   "author": "Nwflower",
+  "contributors": ["z905888415-beep"],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Nwflower/dsh-claude-style.git"
+    "url": "git+https://github.com/z905888415-beep/dsh-claude-style-my-character.git"
   },
-  "homepage": "https://github.com/Nwflower/dsh-claude-style#readme",
+  "homepage": "https://github.com/z905888415-beep/dsh-claude-style-my-character#readme",
   "bugs": {
-    "url": "https://github.com/Nwflower/dsh-claude-style/issues"
+    "url": "https://github.com/z905888415-beep/dsh-claude-style-my-character/issues"
   },
   "peerDependencies": {
     "@deepseek-ai/dsh-client-ui-primitives": ">=0.1.5-rc.1",

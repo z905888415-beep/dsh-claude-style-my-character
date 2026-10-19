@@ -1,24 +1,78 @@
 <div align="center">
 
-# DSH Claude Style
+# DSH Claude Style · My Character Fork
 
-**A theme plugin that brings the look and feel of Claude Code Desktop to the DeepSeek Harness Web GUI.**
+**An unofficial derivative of [Nwflower/dsh-claude-style](https://github.com/Nwflower/dsh-claude-style), adding a custom character with eight animated states while retaining the Claude interface.**
 
-> **Claude Code Desktop, right inside DSH.**
+Original author: [Nwflower](https://github.com/Nwflower) · Upstream base: [93490c7 (0.16.3)](https://github.com/Nwflower/dsh-claude-style/commit/93490c73f21e18041790cc572db31603fecc3ad7) · [This fork](https://github.com/z905888415-beep/dsh-claude-style-my-character)
 
 [![English](https://img.shields.io/badge/lang-English-blue.svg)](README.en.md) [![简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-red.svg)](README.md)
 
-[![version](https://img.shields.io/npm/v/dsh-claude-style?style=flat&label=version&color=D97757)](https://www.npmjs.com/package/dsh-claude-style)
-[![downloads](https://img.shields.io/npm/dm/dsh-claude-style?style=flat&label=downloads&color=D97757)](https://www.npmjs.com/package/dsh-claude-style)
-[![GitHub stars](https://img.shields.io/github/stars/Nwflower/dsh-claude-style?style=flat&label=%E2%98%85&color=08C)](https://github.com/Nwflower/dsh-claude-style)
-[![dsh.so install](https://www.dsh.so/badge/install/dsh-claude-style.svg)](https://www.dsh.so/artifact/dsh-claude-style/)
-[![license](https://img.shields.io/badge/license-MIT-2EA44F?style=flat)](LICENSE)
+[![Fork](https://img.shields.io/badge/edition-unofficial%20fork-D97757?style=flat)](docs/FORK_CHANGES.md)
+[![Code license](https://img.shields.io/badge/code-MIT-2EA44F?style=flat)](LICENSE)
 
 </div>
 
-## Preview
+## What this fork changes
 
-The settings page switches between the two palettes; light and dark follow the system.
+- **Adds a My Character mascot option**: choose the interface brand and mascot independently, including **Claude interface + My Character**. The original Clawd and Deepy options remain available.
+- **Eight transparent animation loops**: idle, thinking, working, conducting subagents, waiting for input, failed, finished and asleep, with **602 frames** in total; defaults are **20 fps and a 96 px display canvas**. Eight base animations map onto the plugin's 18 character states.
+- **Connects the character to settings and interactions**: show it on the home page or on both home and conversations; context compaction, concurrent work, clicks and waking also use the custom character.
+- **Adds a local character-pack build path**: transparent PNG sprite sheets and a manifest describe frame counts, dimensions and timing. The build checks dimensions and transparency, and the binary asset route serves the PNG bytes unchanged.
+
+The fork maintainer supplied the character reference artwork and Grok-generated videos. Local processing removes the green background, aligns the character, extracts frames and prepares loops. A few loop seams retain slight ghosting. See [Fork changes](docs/FORK_CHANGES.md) for the implementation scope, state mapping and verification coverage.
+
+**This is an unofficial derivative. Upstream code, characters and third-party assets retain their original credits and terms; the added character assets do not automatically receive the code's MIT license.** See [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md).
+
+## My Character: eight animated states
+
+<table>
+  <tr>
+    <td align="center" width="25%"><img src="./docs/custom-character/idle.gif" width="120" alt="My Character: idle" /><br />Idle</td>
+    <td align="center" width="25%"><img src="./docs/custom-character/thinking.gif" width="120" alt="My Character: thinking" /><br />Thinking</td>
+    <td align="center" width="25%"><img src="./docs/custom-character/typing.gif" width="120" alt="My Character: working" /><br />Working</td>
+    <td align="center" width="25%"><img src="./docs/custom-character/conducting.gif" width="120" alt="My Character: conducting subagents" /><br />Conducting subagents</td>
+  </tr>
+  <tr>
+    <td align="center" width="25%"><img src="./docs/custom-character/notification.gif" width="120" alt="My Character: waiting for input" /><br />Waiting for input</td>
+    <td align="center" width="25%"><img src="./docs/custom-character/error.gif" width="120" alt="My Character: failed" /><br />Failed</td>
+    <td align="center" width="25%"><img src="./docs/custom-character/happy.gif" width="120" alt="My Character: finished" /><br />Finished</td>
+    <td align="center" width="25%"><img src="./docs/custom-character/sleeping.gif" width="120" alt="My Character: asleep" /><br />Asleep</td>
+  </tr>
+</table>
+
+| Base animation | File | Frames | Loop duration at 20 fps |
+| --- | --- | ---: | ---: |
+| Idle | `idle.png` | 96 | 4.80 s |
+| Thinking | `thinking.png` | 36 | 1.80 s |
+| Working / answering / calling tools | `typing.png` | 101 | 5.05 s |
+| Conducting subagents | `conducting.png` | 78 | 3.90 s |
+| Waiting for input | `notification.png` | 65 | 3.25 s |
+| Failed | `error.png` | 81 | 4.05 s |
+| Finished | `happy.png` | 111 | 5.55 s |
+| Asleep | `sleeping.png` | 34 | 1.70 s |
+
+GIFs are documentation previews; the plugin uses transparent PNG sprite sheets at runtime.
+
+## Install this fork
+
+This fork has not been published to npm. The upstream `dsh-claude-style` package installs the upstream edition; build this repository and install it from the local directory to use these changes. Node.js, npm and DeepSeek Harness (`dsh ≥ 0.1.7`) are required.
+
+```bash
+git clone https://github.com/z905888415-beep/dsh-claude-style-my-character.git
+cd dsh-claude-style-my-character
+npm ci
+npm run build
+dsh plugin --profile web add .
+```
+
+This fork retains the plugin identifier `dsh-claude-style`. Enable one edition of the theme in a profile, then restart DeepSeek Harness. In the plugin's Appearance settings, select **Claude** for the brand, **My Character** for the mascot and the desired placement.
+
+The character pack lives in [`packages/assets/src/mascot/custom/`](packages/assets/src/mascot/custom/): eight transparent PNG sheets and [`manifest.json`](packages/assets/src/mascot/custom/manifest.json). Source frames are 256 × 256 px, with eight frames per row, a default interval of 50 ms and a 96 × 96 px display canvas. Rebuild and restart the host after replacing the assets.
+
+## Inherited upstream features
+
+The following interface screenshots and Deepy GIFs are retained from the upstream documentation to illustrate inherited features. The custom character previews are above. The settings page switches between the two palettes; light and dark follow the system.
 
 ### Claude
 
@@ -67,21 +121,6 @@ The settings page switches between the two palettes; light and dark follow the s
 
 > The workspaces, sessions, usage figures and nickname in the screenshots are sample data.
 
-## Installation
-
-From the official plugin page add the package below, or from a terminal:
-
-```
-dsh-claude-style
-```
-
-```bash
-dsh plugin --profile web add dsh-claude-style                    # npm package (recommended)
-dsh plugin --profile web add Nwflower/dsh-claude-style           # GitHub source
-```
-
-Also from the [plugin market](https://github.com/dsh-market/dsh-market) or the Skin Center of the dsh-web-all plugin. Keep one theme enabled at a time; dsh ≥ 0.1.7 is required, and a restart of DeepSeek Harness brings the full feature set.
-
 ## Fonts
 
 > **The Anthropic fonts do not ship with the npm package; the copies in this repository are for download and study only.**
@@ -98,6 +137,8 @@ To enable them, install the `.ttf` files on your system (double-click and choose
 
 | Document | Contents |
 | --- | --- |
+| [Fork changes](docs/FORK_CHANGES.md) | Upstream attribution, changes, character state mapping and verification coverage |
+| [Third-party notices](THIRD_PARTY_NOTICES.md) | Sources and license boundaries for code, characters and fonts |
 | [Design tokens](docs/STYLE.md) | The palette, typography, shape, motion and layer rules (in English) |
 | [Architecture decisions](docs/adr/README.md) | One page per direction: background, decision, consequences, revisiting conditions (in Chinese) |
 | [Changelog](CHANGELOG.md) | Version history |
@@ -105,17 +146,19 @@ To enable them, install the `.ttf` files on your system (double-click and choose
 
 ## Acknowledgements
 
+- This fork builds on [dsh-claude-style](https://github.com/Nwflower/dsh-claude-style) by [Nwflower](https://github.com/Nwflower), retaining its Claude / DeepSeek interfaces, settings, character scheduling and development tools. The original attribution and MIT license are preserved.
+- The fork maintainer supplied the added character reference artwork and Grok videos. Transparent sprite sheets and loop processing are part of this fork; asset terms are documented separately.
 - The conversation navigator's opening list, keyboard jumps and landing line follow SherUnlocked-4869's [dsh-plugin-msg-nav](https://github.com/SherUnlocked-4869/dsh-plugin-msg-nav) (MIT).
 - The animation frames of Deepy the pixel whale come from the Deepy whale theme pack drawn by calmly-eating-bugs ([@wp3171216237](https://github.com/wp3171216237)), and ship with the plugin by the author's permission; GIFs of all 20 animations are in [docs/gifs/](docs/gifs/).
 - The enhanced animations in the chat area are modified from [dsh-chat-ux](https://github.com/alm-allen/dsh-chat-ux) (MIT).
-- The pixel crab (Clawd) is a character of Anthropic: its laptop animation is taken from Claude Code, the animations of its other states are drawn by this project after that character, and its frames are not covered by the MIT license (see [LICENSE](LICENSE)). This plugin is an unofficial fan work, not affiliated with or endorsed by Anthropic.
+- The pixel crab (Clawd) is a character of Anthropic: its laptop animation is taken from Claude Code, the animations of its other states are drawn by the upstream project after that character, and its frames are not covered by the MIT license (see [LICENSE](LICENSE)). This plugin is an unofficial fan work, not affiliated with or endorsed by Anthropic.
 
 ## Related projects
 
 > Running several themes at once? Try [dsh-skin-manager](https://github.com/xiaoyangcheng84-svg/dsh-skin-manager) — it switches between all installed themes from a single settings page.
 
-> Want to import your Claude Code / Codex session history into DSH and keep the conversation going? Try the author's other plugin, [dsh-chat-import](https://github.com/Nwflower/dsh-chat-import).
+> Want to import your Claude Code / Codex session history into DSH and keep the conversation going? Try the upstream author's other plugin, [dsh-chat-import](https://github.com/Nwflower/dsh-chat-import).
 
-## Star History
+## Upstream Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Nwflower/dsh-claude-style&type=Date)](https://star-history.com/#Nwflower/dsh-claude-style&Date)
